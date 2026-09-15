@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered platform user or instructor",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["student", "teacher", "institution_admin", "super_admin"] },
+        "avatar": { "type": "string" },
+        "bio": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "role"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Self-paced course offering in the marketplace",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "code": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "level": { "type": "string", "enum": ["beginner", "intermediate", "advanced", "higher_ed", "k12", "vocational"] },
+        "status": { "type": "string", "enum": ["draft", "pending_review", "published", "rejected", "archived"] },
+        "primaryTeacherName": { "type": "string" },
+        "teacherIds": { "type": "array" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "enrolledStudentsCount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "code", "status", "price"]
+    },
+    "Enrollment": {
+      "title": "Enrollment",
+      "description": "Student enrollment record for a course",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "paymentStatus": { "type": "string", "enum": ["free", "paid"] },
+        "stripePaymentId": { "type": "string" },
+        "amountPaid": { "type": "number" },
+        "enrolledAt": { "type": "string" },
+        "progress": { "type": "number" },
+        "completed": { "type": "boolean" }
+      },
+      "required": ["id", "studentId", "courseId", "paymentStatus", "enrolledAt"]
+    },
+    "Certificate": {
+      "title": "Certificate",
+      "description": "Issued certificate of completion for students",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "certificateNumber": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "courseId": { "type": "string" },
+        "courseTitle": { "type": "string" },
+        "instructorName": { "type": "string" },
+        "issuedAt": { "type": "string" },
+        "grade": { "type": "string" },
+        "verificationUrl": { "type": "string" }
+      },
+      "required": ["id", "certificateNumber", "studentId", "courseId", "issuedAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Student review and star rating for a course",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentAvatar": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "courseId", "studentId", "rating", "comment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Marketplace course offerings"
+    },
+    "/enrollments/{enrollmentId}": {
+      "schema": "Enrollment",
+      "description": "Student course enrollments and payment status"
+    },
+    "/certificates/{certificateId}": {
+      "schema": "Certificate",
+      "description": "Issued course completion certificates"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Course reviews and student ratings"
+    }
+  }
+}
